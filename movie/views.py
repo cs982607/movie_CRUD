@@ -15,7 +15,7 @@ class MovieListView(View):
        }for movie in movie_list]
 
         if not movies:
-            return JsonResponse({'message':'NOT_EXIST_MOVIE'}, status=400)
+            return JsonResponse({'message':'NOT_EXIST_MOVIE'}, status=404)
         return JsonResponse({"movies": movies}, status=200)
 
     def post(self, request):
@@ -33,7 +33,7 @@ class MovieListView(View):
             )
            return JsonResponse({'message':'SUCCESS'}, status=200)
         except KeyError:
-            return JsonResponse({'message':'KEY_ERROR'}, status=400)
+            return JsonResponse({'message':'KEY_ERROR'}, status=404)
 
 class MovieDetailView(View):
     maxDiff = None
@@ -52,7 +52,7 @@ class MovieDetailView(View):
                 }
             return JsonResponse({'movie_detail':movie_detail}, status=200)
         except Movie.DoesNotExist:
-            return JsonResponse({'message':'NOT_EXIST_MOVIE'}, status=400)
+            return JsonResponse({'message':'NOT_EXIST_MOVIE'}, status=404)
 
     def delete(self, request, movie_id):
         try :
@@ -61,7 +61,7 @@ class MovieDetailView(View):
 
             return JsonResponse({'message':'SUCCESS'}, status=200)
         except Movie.DoesNotExist:
-            return JsonResponse({'message':'NOT_EXIST_MOVIE'}, status=400)
+            return JsonResponse({'message':'NOT_EXIST_MOVIE'}, status=404)
 
     def put(self, request, movie_id):
         try:
@@ -88,4 +88,4 @@ class MovieDetailView(View):
 
             return JsonResponse({'message':'SUCCESS'}, status=200)
         except Movie.DoesNotExist:
-            return JsonResponse({'message':'NOT_EXIST_MOVIE'}, status=400)
+            return JsonResponse({'message':'NOT_EXIST_MOVIE'}, status=404)
