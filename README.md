@@ -5,19 +5,22 @@
 테스트를 위해 SecretKey와 같이 업로드 되었습니다.
 
 ### 질문 1 
-### 1-1. RESTful API인 /movies 의 Movie Data Model
+### 1-1. RESTful API인 /movies 의 Movie Data 필요한 Field(Model)
 
 ```
-    name        #영화 제목
-    country     #영화 제작 국가
-    main_image  # 메인 이미지
-    description # 영화 소개
-    show_time   # 상영 시간
-    genre       # 영화 장르
-    director    # 영화 제작 감독
-    actor       # 영화 출연 배우 
+    name         = models.CharField(max_length=50)             #영화 제목
+    country      = models.CharField(max_length=50, null=True)  #영화 제작 국가
+    main_image   = models.URLField(max_length=200)             # 메인 이미지
+    description  = models.TextField(null=True)                 # 영화 소개
+    show_time    = models.IntegerField(null=True)              # 상영 시간
+    genre        = models.CharField(max_length=50, null=True)  # 영화 장르
+    director     = models.CharField(max_length=50, null=True)  # 영화 제작 감독
+    actor        = models.CharField(max_length=50, null=True)  # 영화 출연 배우
+
 ```
+
 ### 1-2. 기대하는 HTTP Status code와 JSON data 형식.
+
 ``` 
 ------------------------------------------------------------------------------------------
 
