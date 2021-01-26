@@ -15,7 +15,7 @@ class MovieListView(View):
        }for movie in movie_list]
 
         if not movies:
-            return JsonResponse({'message':'NOT_EXIST_MOVIE'}, status=404)
+            return JsonResponse({'message':'NOT_FOUND'}, status=404)
         return JsonResponse({"movies": movies}, status=200)
 
     def post(self, request):
@@ -31,9 +31,9 @@ class MovieListView(View):
                 director    = data['director'],
                 actor       = data['actor']
             )
-           return JsonResponse({'message':'SUCCESS'}, status=200)
-        except KeyError:
-            return JsonResponse({'message':'KEY_ERROR'}, status=404)
+           return JsonResponse({'message':'CREATED'}, status=201)
+        except :
+            return JsonResponse({'message':'CONFLICT'}, status=409)
 
 class MovieDetailView(View):
     def get(self, request, movie_id):
@@ -49,18 +49,19 @@ class MovieDetailView(View):
                 'director'    : movie.director,
                 'actor'       : movie.actor,
                 }
+
             return JsonResponse({'movie_detail':movie_detail}, status=200)
         except Movie.DoesNotExist:
-            return JsonResponse({'message':'NOT_EXIST_MOVIE'}, status=404)
+            return JsonResponse({'message':'NOT_FOUND'}, status=404)
 
     def delete(self, request, movie_id):
         try :
-            movie    = Movie.objects.get(id=movie_id)
+            movie = Movie.objects.get(id=movie_id)
             movie.delete()
 
-            return JsonResponse({'message':'SUCCESS'}, status=200)
+            return JsonResponse({'message':'NO_CONTENTS'}, status=204)
         except Movie.DoesNotExist:
-            return JsonResponse({'message':'NOT_EXIST_MOVIE'}, status=404)
+            return JsonResponse({'message':'METHOD_NOT_ALLOWED'}, status=405)
 
     def put(self, request, movie_id):
         try:
@@ -85,6 +86,6 @@ class MovieDetailView(View):
                 movie.actor       = data['actor']
             movie.save()
 
-            return JsonResponse({'message':'SUCCESS'}, status=200)
+            return JsonResponse({'message':'ACCEPTED'}, status=202)
         except Movie.DoesNotExist:
-            return JsonResponse({'message':'NOT_EXIST_MOVIE'}, status=404)
+            return JsonResponse({'message':'NOT_ACCEPTABLE'}, status=406)

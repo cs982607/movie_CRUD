@@ -44,7 +44,7 @@ class MovieListTestCase(TestCase):
         self.movie.delete()
         response = self.client.get(self.URL)
         self.assertEqual(response.status_code, 404)
-        self.assertEqual(response.json(),{'message':'NOT_EXIST_MOVIE'})
+        self.assertEqual(response.json(),{'message':'NOT_FOUND'})
 
     def test_movie_post_success(self):
         request = {
@@ -60,8 +60,14 @@ class MovieListTestCase(TestCase):
         }
 
         response = self.client.post(self.URL, request, content_type='application/json')
-        self.assertEqual(response.json(),{'message':'SUCCESS'})
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(),{'message':'CREATED'})
+        self.assertEqual(response.status_code, 201)
+
+    def test_movie_post_fail(self):
+
+        response = self.client.post(self.URL, content_type='application/json')
+        self.assertEqual(response.json(),{'message':'CONFLICT'})
+        self.assertEqual(response.status_code, 409)
 
 
 class MovieDetailTestCase(TestCase):
@@ -90,6 +96,17 @@ class MovieDetailTestCase(TestCase):
             actor       = self.DUMMY_ACTOR
         )
 
+        self.movie1 = Movie.objects.create(
+            id          = 2,
+            name        = self.DUMMY_NAME,
+            country     = self.DUMMY_COUNTRY,
+            main_image  = self.DUMMY_MAIN_IMAGE,
+            description = self.DUMMY_DESCRIPTION,
+            show_time   = self.DUMMY_SHOW_TIME,
+            genre       = self.DUMMY_GENRE,
+            director    = self.DUMMY_DIRECTOR,
+            actor       = self.DUMMY_ACTOR
+        )
     def tearsDown(self):
         pass
 
@@ -111,19 +128,16 @@ class MovieDetailTestCase(TestCase):
     def test_moviedetail_get_fail(self):
         response = self.client.get('/movies/2000')
         self.assertEqual(response.status_code, 404)
-        self.assertEqual(response.json(),{'message':'NOT_EXIST_MOVIE'})
+        self.assertEqual(response.json(),{'message':'NOT_FOUND'})
 
     def test_moviedetail_delete_success(self):
-
         response = self.client.delete(self.URL)
-        self.assertEqual(response.json(),{'message':'SUCCESS'})
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 204)
 
     def test_moviedetail_delete_fail(self):
-
         response = self.client.delete('/movies/1000')
-        self.assertEqual(response.json(),{'message':'NOT_EXIST_MOVIE'})
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.json(),{'message':'METHOD_NOT_ALLOWED'})
+        self.assertEqual(response.status_code, 405)
 
     def test_moviedetail_put_success(self):
         request = {
@@ -138,8 +152,8 @@ class MovieDetailTestCase(TestCase):
         }
 
         response = self.client.put(self.URL, request, content_type='application/json')
-        self.assertEqual(response.json(),{'message':'SUCCESS'})
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(),{'message':'ACCEPTED'})
+        self.assertEqual(response.status_code, 202)
 
     def test_moviedetail_put_fail(self):
         request = {
@@ -153,7 +167,7 @@ class MovieDetailTestCase(TestCase):
             'actor'       : '배우'
         }
 
-        response = self.client.put('/movies/2', request, content_type='application/json')
-        self.assertEqual(response.json(),{'message':'NOT_EXIST_MOVIE'})
-        self.assertEqual(response.status_code, 404)
+        response = self.client.put('/movies/3', request, content_type='application/json')
+        self.assertEqual(response.json(),{'message':'NOT_ACCEPTABLE'})
+        self.assertEqual(response.status_code, 406)
 
