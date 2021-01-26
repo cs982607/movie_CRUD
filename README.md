@@ -59,7 +59,7 @@ GET /movies
 Not found
 Status = 404
 {
-    "message": "NOT_EXIST_MOVIE"
+    "message": "NOT_FOUND"
 }
 
 ------------------------------------------------------------------------------------------
@@ -86,14 +86,14 @@ Not found
 Status = 404
 
 {
-    "message": "NOT_EXIST_MOVIE"
+    "message": "NOT_FOUND"
 }
 
 ------------------------------------------------------------------------------------------
 
 POST /movies
 Created
-Status = 200
+Status = 201
 {
     "name"        : "블라인드",
     "country"     : "미국",
@@ -107,41 +107,41 @@ Status = 200
 
 POST /movies
 Conflict
-Status = 404
+Status = 409
 {
-    "message": "KEY_ERROR"
+    "message": "CONFLICT"
 }
 
 ------------------------------------------------------------------------------------------
 
 PUT /movies/{movie_id}
 Accepted
-Status = 200
+Status = 202
 {
-    "message": "SUCCESS"
+    "message": "ACCEPTED"
 }
 
 PUT /movies/{movie_id}
 Not acceptable
-Status = 404
+Status = 406
 {
-    "message": "NOT_EXIST_MOVIE"
+    "message": "NOT_ACCEPTABLE"
 }
 
 ------------------------------------------------------------------------------------------
 
 DELETE /movies/{movie_id}
 No contents 
-Status = 200
+Status = 204
 {
-    "message": "SUCCESS"
+    "message": "NO_CONTENTS"
 }
 
 DELETE /movies/{movie_id}
 Method not allowed 
-Status = 404
+Status = 405
 {
-    "message": "NOT_EXIST_MOVIE"
+    "message": "METHOD_NOT_ALLOWED"
 }
 
 ------------------------------------------------------------------------------------------
