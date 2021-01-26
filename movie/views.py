@@ -36,7 +36,6 @@ class MovieListView(View):
             return JsonResponse({'message':'KEY_ERROR'}, status=404)
 
 class MovieDetailView(View):
-    maxDiff = None
     def get(self, request, movie_id):
         try :
             movie = Movie.objects.get(id=movie_id)
