@@ -4,7 +4,7 @@ from .models            import Movie
 
 class MovieListTestCase(TestCase):
     def setUp(self):
-        self.URL = '/movie'
+        self.URL = '/movies'
         self.client = Client()
 
         self.DUMMY_NAME        = 'name'
@@ -43,7 +43,7 @@ class MovieListTestCase(TestCase):
     def test_movie_get_fail(self):
         self.movie.delete()
         response = self.client.get(self.URL)
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 404)
         self.assertEqual(response.json(),{'message':'NOT_EXIST_MOVIE'})
 
     def test_movie_post_success(self):
@@ -66,7 +66,7 @@ class MovieListTestCase(TestCase):
 
 class MovieDetailTestCase(TestCase):
     def setUp(self):
-        self.URL = '/movie/1'
+        self.URL = '/movies/1'
         self.client = Client()
 
         self.DUMMY_NAME        = 'name'
@@ -109,8 +109,8 @@ class MovieDetailTestCase(TestCase):
                 }})
 
     def test_moviedetail_get_fail(self):
-        response = self.client.get('/movie/2000')
-        self.assertEqual(response.status_code, 400)
+        response = self.client.get('/movies/2000')
+        self.assertEqual(response.status_code, 404)
         self.assertEqual(response.json(),{'message':'NOT_EXIST_MOVIE'})
 
     def test_moviedetail_delete_success(self):
@@ -121,9 +121,9 @@ class MovieDetailTestCase(TestCase):
 
     def test_moviedetail_delete_fail(self):
 
-        response = self.client.delete('/movie/1000')
+        response = self.client.delete('/movies/1000')
         self.assertEqual(response.json(),{'message':'NOT_EXIST_MOVIE'})
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 404)
 
     def test_moviedetail_put_success(self):
         request = {
@@ -153,7 +153,7 @@ class MovieDetailTestCase(TestCase):
             'actor'       : '배우'
         }
 
-        response = self.client.put('/movie/2', request, content_type='application/json')
+        response = self.client.put('/movies/2', request, content_type='application/json')
         self.assertEqual(response.json(),{'message':'NOT_EXIST_MOVIE'})
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 404)
 
